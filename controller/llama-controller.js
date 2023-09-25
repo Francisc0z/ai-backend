@@ -46,16 +46,18 @@ const getList = async(req, res = response) => {
 
 const postText = async(req, res = response) => {
 
-    const { items } = req.body;
-    const itemList = ['c++']
+    const { arrayTexto } = req.body;
+    console.log(arrayTexto)
+
     const apiUrl = 'https://jsonplaceholder.typicode.com/users';
+    let promptParameters = ''
     try {
 
-        // for (let index = 0; index < itemList.length; index++) {
-        //     const element = itemList[index];
-        //     promptParameters = promptParameters + ` ${element} and `
-        // }
-        // prompt = `hello llama, give me a list of 20 items with more priority of ${promptParameters}`
+        for (let index = 0; index < arrayTexto.length; index++) {
+            const element = arrayTexto[index];
+            promptParameters = promptParameters + ` ${element} and `
+        }
+        prompt = `hello llama, give me a list of 20 items with more priority of ${promptParameters}`
         await axios.get(apiUrl)
             .then(response => {
                 // Manejar la respuesta exitosa
