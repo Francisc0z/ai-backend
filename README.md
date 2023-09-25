@@ -37,3 +37,5 @@
     "skip_special_tokens": true,
     "stopping_strings": []
 }
+
+ngrok config add-authtoken 2Vta7SIVtZtrS1iQeL9kJdB8sxR_zNoAjPYjpkK8rAbk2mnX
