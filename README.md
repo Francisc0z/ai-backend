@@ -37,5 +37,8 @@
     "skip_special_tokens": true,
     "stopping_strings": []
 }
+Para forwardear el puerto
+choco i ngrok
+ngrok config add-authtoken --
+ngrok http 5000
 
-ngrok config add-authtoken 2Vta7SIVtZtrS1iQeL9kJdB8sxR_zNoAjPYjpkK8rAbk2mnX
