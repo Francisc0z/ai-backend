@@ -10,7 +10,7 @@ const app = express();
 
 
 // Directorio Público
-app.use( express.static('public') );
+app.use(express.static('public'));
 
 // CORS
 app.use( cors() );

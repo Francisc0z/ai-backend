@@ -54,10 +54,10 @@ const getList = async(req, res = response) => {
         localPrompt.max_new_tokens = 200;
         localPrompt.prompt = prompt_text;
 
-        // const resp = await axios.post(apiUrl, localPrompt);
-        // let responseLlama = resp.data.results[0].text;
-        let responseLlama = `[nodejs, event loop, callbacks, promises, async/await, modules, require, npm, server, http, https, socket.io, express, mongoose, redis, database, query, middleware, routes, error 
-        // handling]`
+        const resp = await axios.post(apiUrl, localPrompt);
+        let responseLlama = resp.data.results[0].text;
+        // let responseLlama = `[nodejs, event loop, callbacks, promises, async/await, modules, require, npm, server, http, https, socket.io, express, mongoose, redis, database, query, middleware, routes, error 
+        // // handling]`
         
         return res.status(200).json({
             ok: true,
@@ -88,9 +88,9 @@ const getFirstLook = async(req, res = response) => {
         localPrompt.max_new_tokens = 500;
         localPrompt.prompt = prompt_text;
 
-        // const resp = await axios.post(apiUrl, localPrompt);
-        // let responseLlama = resp.data.results[0].text;
-        let responseLlama = `Introducción sencilla a COBOL: COBOL (Common Business-Oriented Language) es un lenguaje de programación desarrollado en la década de 1950 y ampliamente utilizado en el sector empresarial para procesamiento de datos y gestión de información. Es conocido por su estructura organizada y su capacidad para manejar grandes volúmenes de datos. Su sintaxis es clara y fácil de entender, lo que lo hace ideal para aplicaciones comerciales y gubernamentales.`
+        const resp = await axios.post(apiUrl, localPrompt);
+        let responseLlama = resp.data.results[0].text;
+        // let responseLlama = `Introducción sencilla a COBOL: COBOL (Common Business-Oriented Language) es un lenguaje de programación desarrollado en la década de 1950 y ampliamente utilizado en el sector empresarial para procesamiento de datos y gestión de información. Es conocido por su estructura organizada y su capacidad para manejar grandes volúmenes de datos. Su sintaxis es clara y fácil de entender, lo que lo hace ideal para aplicaciones comerciales y gubernamentales.`
         console.log(responseLlama)
         return res.status(200).json({
             ok: true,
@@ -125,9 +125,7 @@ const postText = async(req, res = response) => {
         }
         console.log("Inicia la consulta a postText");
 
-        prompt_text = `Olvida lo anterior y dame informacion de ${arrayTexto[(arrayTexto.length - 1)]} haciendo incapie en${promptParameters}, 
-                        no des ejemplos de codigo y al final quiero que me listes las keywords mas importantes del texto que me diste como una lista en 
-                        javascript, de forma que quede asi: informacion: " ", keywords: ["item1", "item2", etc]`;
+        prompt_text = `Hola, dame informacion de ${arrayTexto[(arrayTexto.length - 1)]} teniendo en cuenta que hablamos de${promptParameters}. No des ejemplos de codigo. Al final de la explicacion quiero que escribas las keywords mas importantes de tu respuesta representadas de la siguiente forma 'keywords: ['keyword1', 'keyword2', etc]', limitate a seguir el ejemplo que te di a la hora de dar las keywords, entre corchetes y separadas por comas`;
 
         const stringlocalPrompt = JSON.stringify(bodyPrompt);
         const localPrompt = JSON.parse(stringlocalPrompt) 
@@ -135,7 +133,7 @@ const postText = async(req, res = response) => {
         localPrompt.prompt = prompt_text;
         const resp = await axios.post(apiUrl, localPrompt);
         let responseLlama = resp.data.results[0].text;
-
+        console.log(responseLlama)
         // Generar respuesta exitosa
         return res.status(200).json({
             ok: true,
