@@ -1,7 +1,7 @@
 const { response } = require('express');
 const axios = require('axios');
 require('dotenv').config()
-const apiUrl = process.env.PORT;
+const apiUrl = 'http://decent-ace-shepherd.ngrok-free.app/api/v1/generate';
 
 const bodyPrompt = {
     "prompt": "",
