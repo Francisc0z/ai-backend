@@ -41,22 +41,23 @@ const bodyPrompt = {
     "stopping_strings": []
 }
 
+//Lista de conceptos
 const getList = async(req, res = response) => {
     const item = req.query.items;
-
+    console.log(item)
     try {
         //await spanishMust()
 
-        prompt_text = `dame una lista de los 20 conceptos mas utilizados en ${item}, como si fuera una lista en javascript pero sin declarar nada solo de la siguiente forma ['item1', 'item2', etc], no me respondas ni una palabra de mas`
+        prompt_text = `dame una lista de los 20 conceptos mas utilizados en ${item}, como si fuera una lista en javascript pero sin declarar nada solo de la siguiente forma ['item1', 'item2', etc], no me respondas ni una palabra de mas. Recuerda que los conceptos deben tratar sobre ${item}`
         const stringlocalPrompt = JSON.stringify(bodyPrompt);
         const localPrompt = JSON.parse(stringlocalPrompt) 
         localPrompt.max_new_tokens = 200;
         localPrompt.prompt = prompt_text;
-        console.log(localPrompt)
-        const resp = await axios.post(apiUrl, localPrompt);
-        let responseLlama = resp.data.results[0].text;
-        
-        console.log(responseLlama)
+
+        // const resp = await axios.post(apiUrl, localPrompt);
+        // let responseLlama = resp.data.results[0].text;
+        let responseLlama = `[nodejs, event loop, callbacks, promises, async/await, modules, require, npm, server, http, https, socket.io, express, mongoose, redis, database, query, middleware, routes, error 
+        // handling]`
         
         return res.status(200).json({
             ok: true,
@@ -73,21 +74,24 @@ const getList = async(req, res = response) => {
 
 }
 
+//Funcion que genera el texto del comienzo, luego de la busqueda
 const getFirstLook = async(req, res = response) => {
     const item = req.query.items;
-
+    console.log(item)
+    console.log('starting');
     try {
-        await spanishMust()
 
-        prompt_text = `excelente, ahora hablame de ${item}`
+        prompt_text = `Olvidate de lo anterior. Ahora hablame de ${item} sin utilizar ejemplos de codigo, solo quiero una introduccion simple a ${item}, no uses caracteres
+        especiales de ningun tipo, solo acentos de ser necesarios, no des introduccion ni saludos. Ademas intenta seguir este modelo de respuesta: Introduccion: (texto de introduccion)`
         const stringlocalPrompt = JSON.stringify(bodyPrompt);
         const localPrompt = JSON.parse(stringlocalPrompt) 
         localPrompt.max_new_tokens = 500;
         localPrompt.prompt = prompt_text;
 
-        const resp = await axios.post(apiUrl, localPrompt);
-        let responseLlama = resp.data.results[0].text;
-
+        // const resp = await axios.post(apiUrl, localPrompt);
+        // let responseLlama = resp.data.results[0].text;
+        let responseLlama = `Introducción sencilla a COBOL: COBOL (Common Business-Oriented Language) es un lenguaje de programación desarrollado en la década de 1950 y ampliamente utilizado en el sector empresarial para procesamiento de datos y gestión de información. Es conocido por su estructura organizada y su capacidad para manejar grandes volúmenes de datos. Su sintaxis es clara y fácil de entender, lo que lo hace ideal para aplicaciones comerciales y gubernamentales.`
+        console.log(responseLlama)
         return res.status(200).json({
             ok: true,
             responseLlama
@@ -102,9 +106,11 @@ const getFirstLook = async(req, res = response) => {
     }
 }
 
+//Funcion que devuelve lo buscado con sus conceptos 
 const postText = async(req, res = response) => {
 
     const { arrayTexto } = req.body;
+    console.log(arrayTexto)
     let promptParameters = ''
     try {
 
@@ -117,18 +123,19 @@ const postText = async(req, res = response) => {
                 promptParameters = promptParameters + ` ${element} y`
             }
         }
+        console.log("Inicia la consulta a postText");
 
-        prompt_text = `olvida lo anterior y dame informacion de ${arrayTexto[(arrayTexto.length - 1)]} siempre hablando de${promptParameters}`
+        prompt_text = `Olvida lo anterior y dame informacion de ${arrayTexto[(arrayTexto.length - 1)]} haciendo incapie en${promptParameters}, 
+                        no des ejemplos de codigo y al final quiero que me listes las keywords mas importantes del texto que me diste como una lista en 
+                        javascript, de forma que quede asi: informacion: " ", keywords: ["item1", "item2", etc]`;
 
         const stringlocalPrompt = JSON.stringify(bodyPrompt);
         const localPrompt = JSON.parse(stringlocalPrompt) 
         localPrompt.max_new_tokens = 500;
         localPrompt.prompt = prompt_text;
-
         const resp = await axios.post(apiUrl, localPrompt);
         let responseLlama = resp.data.results[0].text;
-        getKeywords('hola');
-        console.log(responseLlama)
+
         // Generar respuesta exitosa
         return res.status(200).json({
             ok: true,
@@ -147,14 +154,15 @@ const postText = async(req, res = response) => {
     }
 
 }
+
+//Funciones para un posible uso futuro
 const getKeywords = async(text) => {
-    text = '### Respuesta: El tamaño del elemento en CSS se puede especificar utilizando la propiedad `height`. La propiedad `height` establece el ancho o alto de un elemento, dependiendo de si está estableciendo su anchura (`width`) o altura. Por ejemplo, para establecer el alto de un elemento con una caja de texto, podrías usar: ```css'
     const prompt = `te paso este texto: ${text}. solo respondeme las palabras claves que encuentre separandolas por punto y coma, por ejemplo 
                     hola;este;es;un;ejemplo;`
     
     const stringlocalPrompt = JSON.stringify(bodyPrompt);
     const localPrompt = JSON.parse(stringlocalPrompt) 
-    localPrompt.max_new_tokens = 100;
+    localPrompt.max_new_tokens = 120;
     localPrompt.prompt = prompt;
 
     const resp = await axios.post(apiUrl, localPrompt );

@@ -3,14 +3,12 @@ const { getList, postText, getFirstLook } = require('../controller/llama-control
 
 const router = Router();
 
-// Crear un nuevo usuario
 router.get( '/list', [
 ], getList );
 
 router.get( '/initialText', [
 ], getFirstLook );
 
-// Login de usuario
 router.post( '/textIa', [
 ], postText );
 
